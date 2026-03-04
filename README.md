@@ -65,9 +65,6 @@ $$\mathcal{L} = \mathcal{L}_{CE} + \mathbb{E}_i \left[ w_i \cdot \mathrm{KL}\lef
 - `tools/`  
   Utilities for log parsing/plotting (optional extensions)
 
-- `experiments/`  
-  Local outputs (CSV logs, checkpoints). This directory should be ignored by git.
-
 ---
 
 ## Implemented Modes (Research Variants and Baselines)
