@@ -205,3 +205,18 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Experiment outputs
+experiments/
+**/*.csv
+**/*.pth
+**/*.pt
+**/*.ckpt
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
