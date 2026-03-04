@@ -1,4 +1,4 @@
-# BADD-DML: Batch-Adaptive Dynamic Distillation for Online Deep Mutual Learning
+# BADD: Batch-Adaptive Dynamic Distillation for Online Deep Mutual Learning
 
 This repository contains the official implementation of **Batch-Adaptive Dynamic Distillation (BADD)**, a sample-wise reweighting strategy for **online Deep Mutual Learning (DML)**.
 
