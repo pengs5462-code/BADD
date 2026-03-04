@@ -62,9 +62,6 @@ $$\mathcal{L} = \mathcal{L}_{CE} + \mathbb{E}_i \left[ w_i \cdot \mathrm{KL}\lef
   Controlled studies and ablations (kept separate from the main pipeline)
   - `alpha_study.py`: alpha sensitivity study for BADD/V17-family weighting
 
-- `tools/`  
-  Utilities for log parsing/plotting (optional extensions)
-
 ---
 
 ## Implemented Modes (Research Variants and Baselines)
