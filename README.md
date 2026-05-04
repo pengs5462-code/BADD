@@ -1,8 +1,8 @@
-# BADD: Sample-wise Reallocation of KL Divergence Supervision for Online Mutual Learning
+﻿# BADD: Sample-wise Reallocation of KL Divergence Supervision for Online Mutual Learning
 
-This repository contains the official implementation and reproducibility materials for **BADD**, a lightweight sample-wise reallocation method for online mutual learning.
+This repository contains the official implementation and reproducibility materials for **BADD**, a lightweight sample-wise KL-divergence supervision reallocation method for online mutual learning.
 
-BADD uses the mini-batch mean teacher confidence as a moving reference and reallocates the KL-divergence supervision budget according to centered confidence residuals. The design keeps the batch-average distillation strength close to the original DML objective while shifting relatively more KL supervision toward samples with higher within-batch teacher-confidence residuals.
+BADD uses the mini-batch mean teacher confidence as a moving reference and reallocates the KL supervision budget according to centered confidence residuals. The method keeps the batch-average distillation strength close to the original DML objective while shifting relatively more KL supervision toward samples with higher within-batch teacher-confidence residuals.
 
 > Paper title: **BADD: Sample-wise Reallocation of KL Divergence Supervision for Online Mutual Learning**
 
@@ -10,34 +10,51 @@ BADD uses the mini-batch mean teacher confidence as a moving reference and reall
 
 ## 1. Method Overview
 
-In online mutual learning, two peer networks are optimized jointly using supervised cross-entropy and bidirectional KL distillation. For a teacher peer, BADD first computes the maximum softmax probability (MSP) confidence for each sample:
+In online mutual learning, two peer networks are optimized jointly using supervised cross-entropy and bidirectional KL distillation.
+
+For a teacher peer, BADD computes the maximum softmax probability confidence for each sample:
 
 $$
 c_i = \max_k p_T(k \mid x_i).
 $$
 
-The mini-batch mean is then used as a local moving reference:
+The mini-batch mean is used as a local moving reference:
 
 $$
 \mu_B = \frac{1}{M}\sum_{i=1}^{M} c_i,
 $$
 
-and the centered confidence residual is
+and the centered confidence residual is:
 
 $$
 r_i = c_i - \mu_B.
 $$
 
-The BADD sample-wise KL weight is computed as
+The sample-wise KL weight is computed as:
 
 $$
 w_i = 1 + \alpha r_i,
 $$
 
-followed by warm-up, safety clipping, and mean-one renormalization. The weighted objective is
+followed by warm-up, safety clipping, and mean-one renormalization.
+
+The weighted objective is:
 
 $$
-\mathcal{L}=\mathcal{L}_{CE}+\mathbb{E}_i\left[w_i\,\mathrm{KL}\left(p_S(\cdot\mid x_i),p_T(\cdot\mid x_i)\right)\right].
+\mathcal{L}
+=
+\mathcal{L}_{CE}
++
+\mathbb{E}_i
+\left[
+w_i
+\,
+\mathrm{KL}
+\left(
+p_S(\cdot\mid x_i),
+p_T(\cdot\mid x_i)
+\right)
+\right].
 $$
 
 BADD does **not** treat raw MSP as a calibrated probability of correctness. MSP is used after batch centering as a relative within-batch ranking signal.
@@ -49,8 +66,8 @@ BADD does **not** treat raw MSP as a calibrated probability of correctness. MSP 
 This repository provides a reproducibility pipeline for the main experiments:
 
 - multi-dataset configurations for **CIFAR-100**, **Tiny-ImageNet**, **ImageNet-100**, and **CUB-200-2011**;
-- homogeneous/heterogeneous online mutual learning support through one training entry point;
-- BADD, DML baseline, and perturbation controls under the same loss interface;
+- homogeneous and heterogeneous online mutual learning support through one training entry point;
+- DML baseline, BADD, and perturbation-control variants under the same loss interface;
 - magnitude-matched control modes: `random_zero_mean`, `shuffled_residual`, and `sign_flipped`;
 - frequency-domain diagnostics for confidence drift and centered residual signals;
 - gradient-share diagnostics for KL-gradient budget reallocation;
@@ -68,45 +85,43 @@ BADD/
 ├── requirements.txt
 ├── requirements_extra.txt
 ├── configs/
-�?  ├── default.yaml                         # original config, if present
-�?  ├── cifar100_res32_shufv2.yaml
-�?  ├── tiny_imagenet_res18_mbv2.yaml
-�?  ├── imagenet100_res18_mbv2.yaml
-�?  ├── cub200_res18_mbv2.yaml
-�?  └── imagenet100_synsets_template.txt
+│   ├── default.yaml
+│   ├── cifar100_res32_shufv2.yaml
+│   ├── tiny_imagenet_res18_mbv2.yaml
+│   ├── imagenet100_res18_mbv2.yaml
+│   ├── cub200_res18_mbv2.yaml
+│   └── imagenet100_synsets_template.txt
 ├── baddlab/
-�?  ├── __init__.py
-�?  ├── datasets.py
-�?  ├── losses.py
-�?  ├── models.py
-�?  ├── train.py
-�?  └── utils.py
+│   ├── __init__.py
+│   ├── datasets.py
+│   ├── losses.py
+│   ├── models.py
+│   ├── train.py
+│   └── utils.py
 ├── tools/
-�?  ├── aggregate_results.py
-�?  ├── analyze_frequency.py
-�?  ├── analyze_gradient_share.py
-�?  ├── analyze_cumulative_effect.py
-�?  ├── msp_reliability_eval.py
-�?  ├── make_imagenet100_subset.py
-�?  └── prepare_tiny_imagenet.py
+│   ├── aggregate_results.py
+│   ├── analyze_frequency.py
+│   ├── analyze_gradient_share.py
+│   ├── analyze_cumulative_effect.py
+│   ├── msp_reliability_eval.py
+│   ├── make_imagenet100_subset.py
+│   └── prepare_tiny_imagenet.py
 ├── scripts/
-�?  ├── run_sanity.sh
-�?  └── run_core_experiments.sh
+│   ├── run_sanity.sh
+│   └── run_core_experiments.sh
 ├── docs/
-�?  ├── REPRODUCIBILITY.md
-�?  ├── REPRODUCIBILITY.md
-�?  └── GITHUB_UPLOAD_GUIDE.md
+│   └── REPRODUCIBILITY.md
 └── src/
-    └── earlier modular implementation, retained if already present in the repository
+    └── earlier modular implementation
 ```
 
-The previous `src/` implementation can remain in the repository. The new `baddlab/`, `tools/`, `scripts/`, and `docs/` folders provide a compact public pipeline for the revised manuscript experiments.
+The `baddlab/`, `tools/`, `scripts/`, and `docs/` folders provide a compact public pipeline for reproducing the main experiments and diagnostics.
 
 ---
 
 ## 4. Environment
 
-Install the original project dependencies and the additional additional dependencies:
+Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -145,8 +160,8 @@ Expected structure:
 
 ```text
 data/imagenet100/
-├── train/<wnid>/*.JPEG
-└── val/<wnid>/*.JPEG
+├── train/<class>/*.JPEG
+└── val/<class>/*.JPEG
 ```
 
 If constructing ImageNet-100 from an ImageNet-style source, replace `configs/imagenet100_synsets_template.txt` with the exact 100 synset IDs used in your split, save it as `configs/imagenet100_synsets.txt`, and run:
@@ -186,10 +201,14 @@ data/CUB_200_2011/
 
 ## 6. Running Experiments
 
-Use the revised entry point from the repository root:
+Use the main entry point from the repository root:
 
 ```bash
-python -m baddlab.train --config <config.yaml> --mode <mode> --seed <seed>
+python -m baddlab.train \
+  --config <config.yaml> \
+  --mode <mode> \
+  --seed <seed> \
+  --output-root paper_experiments
 ```
 
 ### CIFAR-100 heterogeneous setting
@@ -205,23 +224,23 @@ python -m baddlab.train \
 ### Added datasets
 
 ```bash
-python -m baddlab.train --config configs/tiny_imagenet_res18_mbv2.yaml --mode badd --seed 0
-python -m baddlab.train --config configs/imagenet100_res18_mbv2.yaml --mode badd --seed 0
-python -m baddlab.train --config configs/cub200_res18_mbv2.yaml --mode badd --seed 0
+python -m baddlab.train --config configs/tiny_imagenet_res18_mbv2.yaml --mode badd --seed 0 --output-root paper_experiments
+python -m baddlab.train --config configs/imagenet100_res18_mbv2.yaml --mode badd --seed 0 --output-root paper_experiments
+python -m baddlab.train --config configs/cub200_res18_mbv2.yaml --mode badd --seed 0 --output-root paper_experiments
 ```
 
 ### Baseline and perturbation controls
 
-The revised loss interface supports:
+Supported modes:
 
 ```text
-baseline            # plain DML, uniform KL weights
-badd                # batch-centered MSP residual weighting
-badd_zscore         # z-score variant for ablation
-random_zero_mean    # random zero-mean perturbation, residual-std matched
-shuffled_residual   # residual distribution preserved, sample alignment removed
-sign_flipped        # residual magnitude preserved, reallocation direction reversed
-absolute_msp        # non-mean-preserving MSP control, for ablation only
+baseline
+badd
+badd_zscore
+random_zero_mean
+shuffled_residual
+sign_flipped
+absolute_msp
 ```
 
 Example:
@@ -283,57 +302,21 @@ python tools/msp_reliability_eval.py \
 
 ---
 
-## 8. Quick Sanity Test
+## 8. Notes
 
-After installing dependencies, run:
-
-```bash
-bash scripts/run_sanity.sh
-```
-
-This performs a one-epoch CIFAR-100 run and then checks whether aggregation works.
+- Do not commit datasets, checkpoints, or large experiment outputs.
+- Use `paper_experiments/` or another ignored output directory for generated results.
+- The file `configs/imagenet100_synsets_template.txt` is a template; replace it with the actual synset list used in your ImageNet-100 split.
 
 ---
 
-## 9. Output Files
-
-Each run writes to
-
-```text
-<output-root>/<dataset>/<peer_a>_vs_<peer_b>/<mode>/seed_<seed>/
-```
-
-Typical files:
-
-```text
-run_config.json
-summary.json
-epoch_metrics.csv
-filter_gradient_trace.csv
-latest.pt
-best.pt
-```
-
-Checkpoint files can be large. They are useful for diagnostics but should normally be excluded from GitHub.
-
----
-
-## 10. Citation
-
-If you use this repository, please cite the corresponding manuscript when it becomes available.
+## Citation
 
 ```bibtex
 @article{sun2026badd,
-  title   = {BADD: Sample-wise Reallocation of KL Divergence Supervision for Online Mutual Learning},
-  author  = {Sun, Peng and Zhong, Yuanhong},
-  journal = {IEEE Signal Processing Letters},
-  year    = {2026},
-  note    = {Manuscript}
+  title={BADD: Sample-wise Reallocation of KL Divergence Supervision for Online Mutual Learning},
+  author={Sun, Peng and Zhong, Yuanhong},
+  journal={IEEE Signal Processing Letters},
+  year={2026}
 }
 ```
-
----
-
-## 11. License
-
-This project follows the license file provided in the repository.
