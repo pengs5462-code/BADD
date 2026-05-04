@@ -219,4 +219,35 @@ __pycache__/
 
 # OS
 .DS_Store
-Thumbs.db
+Thumbs.db# Reviewer-revision experiment outputs and large artifacts
+paper_experiments_reviewer1/
+debug_runs/
+runs/
+outputs/
+wandb/
+
+# Datasets and archives
+data/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+
+# Checkpoints
+*.pt
+*.pth
+*.ckpt
+
+# Generated analysis figures/tables
+analysis_frequency/
+analysis_gradient_share/
+analysis_cumulative_effect/
+all_run_summaries.csv
+aggregate_mean_std.csv
+paired_badd_vs_baseline.csv
+
+# Python cache
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

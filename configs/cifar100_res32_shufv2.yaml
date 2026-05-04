@@ -1,0 +1,37 @@
+dataset:
+  name: cifar100
+  root: ./data
+  image_size: 32
+  download: true
+models:
+  peer_a: shufflenetv2_cifar
+  peer_b: resnet32_cifar
+  pretrained: false
+training:
+  epochs: 300
+  batch_size: 128
+optimizer:
+  lr: 0.1
+  momentum: 0.9
+  weight_decay: 0.0005
+  nesterov: true
+scheduler:
+  name: cosine
+loss:
+  mode: badd
+  tau: 3.0
+  # V17_11 best record: Shuffle 76.29 / Res 73.97 used alpha=0.495.
+  alpha: 0.495
+  clip_min: 0.8
+  clip_max: 1.2
+  warmup_epochs: 10
+analysis:
+  log_interval: 20
+  top_fraction: 0.2
+  max_trace_rows: 0
+runtime:
+  output_root: ./paper_experiments_reviewer1
+  workers: 4
+  device: cuda
+  deterministic: true
+  save_checkpoints: true

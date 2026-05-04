@@ -1,0 +1,4 @@
+# Placeholder: replace with the 100 WordNet synset IDs used in your ImageNet-100 split.
+# Example lines:
+# n01440764
+# n01443537

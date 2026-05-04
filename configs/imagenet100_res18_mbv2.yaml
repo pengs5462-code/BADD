@@ -1,0 +1,38 @@
+dataset:
+  name: imagenet100
+  root: ./data/imagenet100
+  image_size: 224
+  download: false
+models:
+  peer_a: mobilenet_v2
+  peer_b: resnet18
+  pretrained: false
+training:
+  # ImageNet full-resolution references often use 90 epochs for ResNet and longer for MobileNetV2.
+  # For ImageNet-100 subset experiments we use 200 cosine epochs by default for stable multi-seed comparison.
+  epochs: 200
+  batch_size: 128
+optimizer:
+  lr: 0.1
+  momentum: 0.9
+  weight_decay: 0.0001
+  nesterov: true
+scheduler:
+  name: cosine
+loss:
+  mode: badd
+  tau: 3.0
+  alpha: 0.5
+  clip_min: 0.8
+  clip_max: 1.2
+  warmup_epochs: 10
+analysis:
+  log_interval: 50
+  top_fraction: 0.2
+  max_trace_rows: 0
+runtime:
+  output_root: ./paper_experiments_reviewer1
+  workers: 8
+  device: cuda
+  deterministic: true
+  save_checkpoints: true
