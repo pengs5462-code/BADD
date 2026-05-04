@@ -66,7 +66,7 @@ This revision package adds the reproducibility pipeline corresponding to the rev
 BADD/
 ├── README.md
 ├── requirements.txt
-├── requirements_reviewer1.txt
+├── requirements_1.txt
 ├── configs/
 │   ├── default.yaml                         # original config, if present
 │   ├── cifar100_res32_shufv2.yaml
@@ -91,7 +91,7 @@ BADD/
 │   └── prepare_tiny_imagenet.py
 ├── scripts/
 │   ├── run_sanity.sh
-│   └── run_reviewer1_core.sh
+│   └── run_1_core.sh
 ├── docs/
 │   ├── REVISION_REPRODUCIBILITY.md
 │   ├── RESPONSE_CODE_MAPPING.md
@@ -110,7 +110,7 @@ Install the original project dependencies and the additional revision dependenci
 
 ```bash
 pip install -r requirements.txt
-pip install -r requirements_reviewer1.txt
+pip install -r requirements_1.txt
 ```
 
 A typical environment uses PyTorch, torchvision, numpy, pandas, PyYAML, Pillow, tqdm, and matplotlib.
@@ -199,7 +199,7 @@ python -m baddlab.train \
   --config configs/cifar100_res32_shufv2.yaml \
   --mode badd \
   --seed 0 \
-  --output-root paper_experiments_reviewer1
+  --output-root paper_experiments_1
 ```
 
 ### Added datasets
@@ -233,7 +233,7 @@ for mode in baseline badd random_zero_mean shuffled_residual sign_flipped; do
       --config configs/cifar100_res32_shufv2.yaml \
       --mode ${mode} \
       --seed ${seed} \
-      --output-root paper_experiments_reviewer1
+      --output-root paper_experiments_1
   done
 done
 ```
@@ -241,7 +241,7 @@ done
 You may also run the prepared script:
 
 ```bash
-bash scripts/run_reviewer1_core.sh
+bash scripts/run_1_core.sh
 ```
 
 ---
@@ -251,33 +251,33 @@ bash scripts/run_reviewer1_core.sh
 Aggregate multi-seed summaries:
 
 ```bash
-python tools/aggregate_results.py --root paper_experiments_reviewer1
+python tools/aggregate_results.py --root paper_experiments_1
 ```
 
 Frequency-domain diagnostic:
 
 ```bash
-python tools/analyze_frequency.py --root paper_experiments_reviewer1
+python tools/analyze_frequency.py --root paper_experiments_1
 ```
 
 Gradient-share diagnostic:
 
 ```bash
-python tools/analyze_gradient_share.py --root paper_experiments_reviewer1
+python tools/analyze_gradient_share.py --root paper_experiments_1
 ```
 
 Cumulative redistribution diagnostic:
 
 ```bash
-python tools/analyze_cumulative_effect.py --root paper_experiments_reviewer1
+python tools/analyze_cumulative_effect.py --root paper_experiments_1
 ```
 
 MSP-residual ranking diagnostic from a saved run:
 
 ```bash
 python tools/msp_reliability_eval.py \
-  --run-config paper_experiments_reviewer1/cifar100/shufflenetv2_cifar_vs_resnet32_cifar/baseline/seed_0/run_config.json \
-  --checkpoint paper_experiments_reviewer1/cifar100/shufflenetv2_cifar_vs_resnet32_cifar/baseline/seed_0/latest.pt \
+  --run-config paper_experiments_1/cifar100/shufflenetv2_cifar_vs_resnet32_cifar/baseline/seed_0/run_config.json \
+  --checkpoint paper_experiments_1/cifar100/shufflenetv2_cifar_vs_resnet32_cifar/baseline/seed_0/latest.pt \
   --device cuda
 ```
 
