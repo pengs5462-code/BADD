@@ -21,19 +21,19 @@ $$
 The mini-batch mean is used as a local moving reference:
 
 $$
-\mu_B = \frac{1}{M}\sum_{i=1}^{M} c_i,
+\mu_B = \frac{1}{M}\sum_{i=1}^{M} c_i .
 $$
 
-and the centered confidence residual is:
+The centered confidence residual is:
 
 $$
-r_i = c_i - \mu_B.
+r_i = c_i - \mu_B .
 $$
 
 The sample-wise KL weight is computed as:
 
 $$
-w_i = 1 + \alpha r_i,
+w_i = 1 + \alpha r_i ,
 $$
 
 followed by warm-up, safety clipping, and mean-one renormalization.
@@ -79,7 +79,7 @@ This repository provides a reproducibility pipeline for the main experiments:
 
 ## 3. Repository Structure
 
-```text
+~~~text
 BADD/
 ├── README.md
 ├── requirements.txt
@@ -113,7 +113,7 @@ BADD/
 │   └── REPRODUCIBILITY.md
 └── src/
     └── earlier modular implementation
-```
+~~~
 
 The `baddlab/`, `tools/`, `scripts/`, and `docs/` folders provide a compact public pipeline for reproducing the main experiments and diagnostics.
 
@@ -123,10 +123,10 @@ The `baddlab/`, `tools/`, `scripts/`, and `docs/` folders provide a compact publ
 
 Install the dependencies:
 
-```bash
+~~~bash
 pip install -r requirements.txt
 pip install -r requirements_extra.txt
-```
+~~~
 
 A typical environment uses PyTorch, torchvision, numpy, pandas, PyYAML, Pillow, tqdm, and matplotlib.
 
@@ -142,36 +142,36 @@ CIFAR-100 can be downloaded automatically by torchvision when `download: true` i
 
 Expected structure after extraction:
 
-```text
+~~~text
 data/tiny-imagenet-200/
 ├── train/<class>/*.JPEG
 └── val/images/*.JPEG
-```
+~~~
 
 Prepare the official validation folder into ImageFolder format:
 
-```bash
+~~~bash
 python tools/prepare_tiny_imagenet.py --root data/tiny-imagenet-200
-```
+~~~
 
 ### ImageNet-100
 
 Expected structure:
 
-```text
+~~~text
 data/imagenet100/
 ├── train/<class>/*.JPEG
 └── val/<class>/*.JPEG
-```
+~~~
 
 If constructing ImageNet-100 from an ImageNet-style source, replace `configs/imagenet100_synsets_template.txt` with the exact 100 synset IDs used in your split, save it as `configs/imagenet100_synsets.txt`, and run:
 
-```bash
+~~~bash
 python tools/make_imagenet100_subset.py \
   --imagenet-root /path/to/imagenet \
   --synsets configs/imagenet100_synsets.txt \
   --out data/imagenet100
-```
+~~~
 
 Use `--copy` if symbolic links are not suitable for your filesystem.
 
@@ -181,21 +181,21 @@ Both structures are supported.
 
 Raw official format:
 
-```text
+~~~text
 data/CUB_200_2011/
 ├── images.txt
 ├── image_class_labels.txt
 ├── train_test_split.txt
 └── images/<class>/<image>.jpg
-```
+~~~
 
 ImageFolder split:
 
-```text
+~~~text
 data/CUB_200_2011/
 ├── train/<class>/*.jpg
 └── val/<class>/*.jpg
-```
+~~~
 
 ---
 
@@ -203,37 +203,37 @@ data/CUB_200_2011/
 
 Use the main entry point from the repository root:
 
-```bash
+~~~bash
 python -m baddlab.train \
   --config <config.yaml> \
   --mode <mode> \
   --seed <seed> \
   --output-root paper_experiments
-```
+~~~
 
 ### CIFAR-100 heterogeneous setting
 
-```bash
+~~~bash
 python -m baddlab.train \
   --config configs/cifar100_res32_shufv2.yaml \
   --mode badd \
   --seed 0 \
   --output-root paper_experiments
-```
+~~~
 
 ### Added datasets
 
-```bash
+~~~bash
 python -m baddlab.train --config configs/tiny_imagenet_res18_mbv2.yaml --mode badd --seed 0 --output-root paper_experiments
 python -m baddlab.train --config configs/imagenet100_res18_mbv2.yaml --mode badd --seed 0 --output-root paper_experiments
 python -m baddlab.train --config configs/cub200_res18_mbv2.yaml --mode badd --seed 0 --output-root paper_experiments
-```
+~~~
 
 ### Baseline and perturbation controls
 
 Supported modes:
 
-```text
+~~~text
 baseline
 badd
 badd_zscore
@@ -241,11 +241,11 @@ random_zero_mean
 shuffled_residual
 sign_flipped
 absolute_msp
-```
+~~~
 
 Example:
 
-```bash
+~~~bash
 for mode in baseline badd random_zero_mean shuffled_residual sign_flipped; do
   for seed in 0 1 2; do
     python -m baddlab.train \
@@ -255,13 +255,13 @@ for mode in baseline badd random_zero_mean shuffled_residual sign_flipped; do
       --output-root paper_experiments
   done
 done
-```
+~~~
 
 You may also run the prepared script:
 
-```bash
+~~~bash
 bash scripts/run_core_experiments.sh
-```
+~~~
 
 ---
 
@@ -269,36 +269,36 @@ bash scripts/run_core_experiments.sh
 
 Aggregate multi-seed summaries:
 
-```bash
+~~~bash
 python tools/aggregate_results.py --root paper_experiments
-```
+~~~
 
 Frequency-domain diagnostic:
 
-```bash
+~~~bash
 python tools/analyze_frequency.py --root paper_experiments
-```
+~~~
 
 Gradient-share diagnostic:
 
-```bash
+~~~bash
 python tools/analyze_gradient_share.py --root paper_experiments
-```
+~~~
 
 Cumulative redistribution diagnostic:
 
-```bash
+~~~bash
 python tools/analyze_cumulative_effect.py --root paper_experiments
-```
+~~~
 
 MSP-residual ranking diagnostic from a saved run:
 
-```bash
+~~~bash
 python tools/msp_reliability_eval.py \
   --run-config paper_experiments/cifar100/shufflenetv2_cifar_vs_resnet32_cifar/baseline/seed_0/run_config.json \
   --checkpoint paper_experiments/cifar100/shufflenetv2_cifar_vs_resnet32_cifar/baseline/seed_0/latest.pt \
   --device cuda
-```
+~~~
 
 ---
 
@@ -312,11 +312,11 @@ python tools/msp_reliability_eval.py \
 
 ## Citation
 
-```bibtex
+~~~bibtex
 @article{sun2026badd,
   title={BADD: Sample-wise Reallocation of KL Divergence Supervision for Online Mutual Learning},
   author={Sun, Peng and Zhong, Yuanhong},
   journal={IEEE Signal Processing Letters},
   year={2026}
 }
-```
+~~~
