@@ -1,17 +1,17 @@
-# Revision Reproducibility Guide
+# Reproducibility Guide
 
-This document explains how the public code corresponds to the revised manuscript experiments.
+This document explains how the public code corresponds to the main experiments.
 
 ## Main experimental groups
 
-| Manuscript / response item | Public file(s) | Purpose |
+| Experiment group | Public file(s) | Purpose |
 |---|---|---|
 | CIFAR-100 heterogeneous setting | `configs/cifar100_res32_shufv2.yaml` | ResNet-32 / ShuffleNetV2 online mutual learning setting |
 | Tiny-ImageNet generalization | `configs/tiny_imagenet_res18_mbv2.yaml` | Added complex low-resolution ImageNet-style benchmark |
 | ImageNet-100 generalization | `configs/imagenet100_res18_mbv2.yaml` | Added ImageNet-derived benchmark |
 | CUB-200-2011 fine-grained recognition | `configs/cub200_res18_mbv2.yaml` | Added fine-grained benchmark |
 | BADD and controls | `baddlab/losses.py` | Implements `baseline`, `badd`, `random_zero_mean`, `shuffled_residual`, `sign_flipped` |
-| Multi-seed training | `baddlab/train.py`, `scripts/run_reviewer1_core.sh` | Runs seeds 0/1/2 under matched configs |
+| Multi-seed training | `baddlab/train.py`, `scripts/run_core_experiments.sh` | Runs seeds 0/1/2 under matched configs |
 | Mean/std + paired wins | `tools/aggregate_results.py` | Aggregates `summary.json` files |
 | Frequency evidence | `tools/analyze_frequency.py` | Computes low-frequency energy ratio from saved traces |
 | Gradient-share evidence | `tools/analyze_gradient_share.py` | Measures top-residual KL-gradient share shifts |
@@ -35,16 +35,16 @@ for mode in baseline badd random_zero_mean shuffled_residual sign_flipped; do
       --config configs/cifar100_res32_shufv2.yaml \
       --mode ${mode} \
       --seed ${seed} \
-      --output-root paper_experiments_reviewer1
+      --output-root paper_experiments
   done
 done
 
-python tools/aggregate_results.py --root paper_experiments_reviewer1
-python tools/analyze_frequency.py --root paper_experiments_reviewer1
-python tools/analyze_gradient_share.py --root paper_experiments_reviewer1
-python tools/analyze_cumulative_effect.py --root paper_experiments_reviewer1
+python tools/aggregate_results.py --root paper_experiments
+python tools/analyze_frequency.py --root paper_experiments
+python tools/analyze_gradient_share.py --root paper_experiments
+python tools/analyze_cumulative_effect.py --root paper_experiments
 ```
 
 ## Notes on public release
 
-Do not commit datasets, checkpoint files, private reviewer correspondence, or manuscript files to the public repository. The public repository should contain code, configuration, and reproducibility documentation only.
+Do not commit datasets, checkpoint files, private correspondence, or manuscript files to the public repository. The public repository should contain code, configuration, and reproducibility documentation only.

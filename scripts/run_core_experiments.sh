@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-OUT_ROOT=${OUT_ROOT:-paper_experiments_reviewer1}
+OUT_ROOT=${OUT_ROOT:-paper_experiments}
 SEEDS=${SEEDS:-"0 1 2"}
 MODES=${MODES:-"baseline badd random_zero_mean shuffled_residual sign_flipped"}
 CONFIGS=${CONFIGS:-"configs/cifar100_res32_shufv2.yaml configs/tiny_imagenet_res18_mbv2.yaml configs/imagenet100_res18_mbv2.yaml configs/cub200_res18_mbv2.yaml"}

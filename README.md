@@ -44,9 +44,9 @@ BADD does **not** treat raw MSP as a calibrated probability of correctness. MSP 
 
 ---
 
-## 2. What This Public Revision Adds
+## 2. What This Repository Provides
 
-This revision package adds the reproducibility pipeline corresponding to the revised manuscript and response letter:
+This repository provides a reproducibility pipeline for the main experiments:
 
 - multi-dataset configurations for **CIFAR-100**, **Tiny-ImageNet**, **ImageNet-100**, and **CUB-200-2011**;
 - homogeneous/heterogeneous online mutual learning support through one training entry point;
@@ -66,36 +66,36 @@ This revision package adds the reproducibility pipeline corresponding to the rev
 BADD/
 ├── README.md
 ├── requirements.txt
-├── requirements_1.txt
+├── requirements_extra.txt
 ├── configs/
-│   ├── default.yaml                         # original config, if present
-│   ├── cifar100_res32_shufv2.yaml
-│   ├── tiny_imagenet_res18_mbv2.yaml
-│   ├── imagenet100_res18_mbv2.yaml
-│   ├── cub200_res18_mbv2.yaml
-│   └── imagenet100_synsets_template.txt
+�?  ├── default.yaml                         # original config, if present
+�?  ├── cifar100_res32_shufv2.yaml
+�?  ├── tiny_imagenet_res18_mbv2.yaml
+�?  ├── imagenet100_res18_mbv2.yaml
+�?  ├── cub200_res18_mbv2.yaml
+�?  └── imagenet100_synsets_template.txt
 ├── baddlab/
-│   ├── __init__.py
-│   ├── datasets.py
-│   ├── losses.py
-│   ├── models.py
-│   ├── train.py
-│   └── utils.py
+�?  ├── __init__.py
+�?  ├── datasets.py
+�?  ├── losses.py
+�?  ├── models.py
+�?  ├── train.py
+�?  └── utils.py
 ├── tools/
-│   ├── aggregate_results.py
-│   ├── analyze_frequency.py
-│   ├── analyze_gradient_share.py
-│   ├── analyze_cumulative_effect.py
-│   ├── msp_reliability_eval.py
-│   ├── make_imagenet100_subset.py
-│   └── prepare_tiny_imagenet.py
+�?  ├── aggregate_results.py
+�?  ├── analyze_frequency.py
+�?  ├── analyze_gradient_share.py
+�?  ├── analyze_cumulative_effect.py
+�?  ├── msp_reliability_eval.py
+�?  ├── make_imagenet100_subset.py
+�?  └── prepare_tiny_imagenet.py
 ├── scripts/
-│   ├── run_sanity.sh
-│   └── run_1_core.sh
+�?  ├── run_sanity.sh
+�?  └── run_core_experiments.sh
 ├── docs/
-│   ├── REVISION_REPRODUCIBILITY.md
-│   ├── RESPONSE_CODE_MAPPING.md
-│   └── GITHUB_UPLOAD_GUIDE.md
+�?  ├── REPRODUCIBILITY.md
+�?  ├── REPRODUCIBILITY.md
+�?  └── GITHUB_UPLOAD_GUIDE.md
 └── src/
     └── earlier modular implementation, retained if already present in the repository
 ```
@@ -106,11 +106,11 @@ The previous `src/` implementation can remain in the repository. The new `baddla
 
 ## 4. Environment
 
-Install the original project dependencies and the additional revision dependencies:
+Install the original project dependencies and the additional additional dependencies:
 
 ```bash
 pip install -r requirements.txt
-pip install -r requirements_1.txt
+pip install -r requirements_extra.txt
 ```
 
 A typical environment uses PyTorch, torchvision, numpy, pandas, PyYAML, Pillow, tqdm, and matplotlib.
@@ -199,7 +199,7 @@ python -m baddlab.train \
   --config configs/cifar100_res32_shufv2.yaml \
   --mode badd \
   --seed 0 \
-  --output-root paper_experiments_1
+  --output-root paper_experiments
 ```
 
 ### Added datasets
@@ -233,7 +233,7 @@ for mode in baseline badd random_zero_mean shuffled_residual sign_flipped; do
       --config configs/cifar100_res32_shufv2.yaml \
       --mode ${mode} \
       --seed ${seed} \
-      --output-root paper_experiments_1
+      --output-root paper_experiments
   done
 done
 ```
@@ -241,7 +241,7 @@ done
 You may also run the prepared script:
 
 ```bash
-bash scripts/run_1_core.sh
+bash scripts/run_core_experiments.sh
 ```
 
 ---
@@ -251,33 +251,33 @@ bash scripts/run_1_core.sh
 Aggregate multi-seed summaries:
 
 ```bash
-python tools/aggregate_results.py --root paper_experiments_1
+python tools/aggregate_results.py --root paper_experiments
 ```
 
 Frequency-domain diagnostic:
 
 ```bash
-python tools/analyze_frequency.py --root paper_experiments_1
+python tools/analyze_frequency.py --root paper_experiments
 ```
 
 Gradient-share diagnostic:
 
 ```bash
-python tools/analyze_gradient_share.py --root paper_experiments_1
+python tools/analyze_gradient_share.py --root paper_experiments
 ```
 
 Cumulative redistribution diagnostic:
 
 ```bash
-python tools/analyze_cumulative_effect.py --root paper_experiments_1
+python tools/analyze_cumulative_effect.py --root paper_experiments
 ```
 
 MSP-residual ranking diagnostic from a saved run:
 
 ```bash
 python tools/msp_reliability_eval.py \
-  --run-config paper_experiments_1/cifar100/shufflenetv2_cifar_vs_resnet32_cifar/baseline/seed_0/run_config.json \
-  --checkpoint paper_experiments_1/cifar100/shufflenetv2_cifar_vs_resnet32_cifar/baseline/seed_0/latest.pt \
+  --run-config paper_experiments/cifar100/shufflenetv2_cifar_vs_resnet32_cifar/baseline/seed_0/run_config.json \
+  --checkpoint paper_experiments/cifar100/shufflenetv2_cifar_vs_resnet32_cifar/baseline/seed_0/latest.pt \
   --device cuda
 ```
 
@@ -328,7 +328,7 @@ If you use this repository, please cite the corresponding manuscript when it bec
   author  = {Sun, Peng and Zhong, Yuanhong},
   journal = {IEEE Signal Processing Letters},
   year    = {2026},
-  note    = {Manuscript under revision/resubmission}
+  note    = {Manuscript}
 }
 ```
 
