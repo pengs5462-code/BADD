@@ -41,20 +41,7 @@ followed by warm-up, safety clipping, and mean-one renormalization.
 The weighted objective is:
 
 $$
-\mathcal{L}
-=
-\mathcal{L}_{CE}
-+
-\mathbb{E}_i
-\left[
-w_i
-\,
-\mathrm{KL}
-\left(
-p_S(\cdot\mid x_i),
-p_T(\cdot\mid x_i)
-\right)
-\right].
+\mathcal{L} = \mathcal{L}_{CE} + \mathbb{E}_{i}\left[w_i \, \mathrm{KL}\left(p_S(\cdot \mid x_i), p_T(\cdot \mid x_i)\right)\right].
 $$
 
 BADD does **not** treat raw MSP as a calibrated probability of correctness. MSP is used after batch centering as a relative within-batch ranking signal.
@@ -320,3 +307,4 @@ python tools/msp_reliability_eval.py \
   year={2026}
 }
 ~~~
+
